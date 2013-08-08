@@ -140,7 +140,6 @@ sub _do_method {
 	$self->_sanitize_params($name, $params) or
 		$self->_error('Failed to sanitize params: "'.$self->get_error.'" - The parameters passed in were: '."\n".$self->_stringify_hash($params), 1);
 
-	print STDERR 'Action: '.$name.' - params passed: '.Dumper $params;
 	return $self->_dispatch_request($name, $params);
 }
 

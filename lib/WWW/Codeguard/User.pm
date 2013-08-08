@@ -384,6 +384,7 @@ sub _fetch_required_params {
 		list_website_rules => { map { ($_ => 1) } qw(website_id) },
 		set_website_rules  => { map { ($_ => 1) } qw(website_id exclude_rules) },
 		create_database    => { map { ($_ => 1) } qw(server_address account password port database_name) },
+		list_databases     => { },
 		show_database      => { map { ($_ => 1) } qw(website_id database_id) },
 		edit_database      => { map { ($_ => 1) } qw(database_id) },
 	};
