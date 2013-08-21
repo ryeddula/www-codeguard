@@ -177,10 +177,10 @@ sub _create_request {
 
 	my ($self, $action, $params) = @_;
 	my $action_map = {
-		'change_plan' => 'POST',
-		'create_user' => 'POST',
-		'delete_user' => 'DELETE',
-		'list_user'   => 'GET',
+		'change_user_plan' => 'POST',
+		'create_user'      => 'POST',
+		'delete_user'      => 'DELETE',
+		'list_user'        => 'GET',
 	};
 	my $request = HTTP::Request->new( $action_map->{$action} );
 	$request->header('Content-Type' => 'application/json' );
@@ -194,10 +194,10 @@ sub _set_uri {
 	my ($self, $action, $request, $params) = @_;
 	my $base_url = $self->get_api_url();
 	my $uri_map = {
-		'change_plan' => '/users/'.($params->{user_id} || '').'/plan',
-		'create_user' => '/users',
-		'delete_user' => '/users/'.($params->{user_id} || ''),
-		'list_user'   => '/users/'.($params->{user_id} || ''),
+		'change_user_plan' => '/users/'.($params->{user_id} || '').'/plan',
+		'create_user'      => '/users',
+		'delete_user'      => '/users/'.($params->{user_id} || ''),
+		'list_user'        => '/users/'.($params->{user_id} || ''),
 	};
 	$request->uri($base_url.$uri_map->{$action}.'?api_key='.$self->get_partner_key);
 	return;
@@ -207,9 +207,9 @@ sub _fetch_required_params {
 
 	my ($self, $action, $params) = @_;
 	my $required_keys_map = {
-		'create_user' => { map { ($_ => 1) } qw(name email) },
-		'list_user'   => { map { ($_ => 1) } qw(user_id) },
-		'change_plan' => { map { ($_ => 1) } qw(user_id plan_id) },
+		'create_user'      => { map { ($_ => 1) } qw(name email) },
+		'list_user'        => { map { ($_ => 1) } qw(user_id) },
+		'change_user_plan' => { map { ($_ => 1) } qw(user_id plan_id) },
 	};
 	$required_keys_map->{delete_user} = $required_keys_map->{list_user};
 	return $required_keys_map->{$action};

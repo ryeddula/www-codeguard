@@ -88,6 +88,8 @@ provider
 
 Optional:
 
+dir_path
+
 port
 
 =cut
@@ -174,25 +176,27 @@ This allows you to create a database resource under your User account. Params sh
 
 Required: The request will not succeed without these attributes.
 
-website_id
+The request will not succeed without these attributes.
 
-server_address
+server_address - MySQL Database Hostname or IP address.
 
-account
+account - MySQL username which has access to the database_name database.
 
-password
+password - MySQL password associated with account. Note: This parameter is only used during the create action. It is never returned by other API requests.
 
-port
+port - MySQL server port number for use with the server_name.
 
-database_name
+database_name - The name of the target database.
 
-Optional Attributes
+Optional Attributes:
 
-authentication_mode
+website_id - Numeric ID of the parent Website record. If no website_id is provided, the Database will not be associated with a Website record.
 
-server_account
+authentication_mode - This service can has two modes: direct and ssh. The direct method will attempt to open a connection using a MySQL client on the specified server and port. The ssh method will create an SSH tunnel through server_name using the server_account and server_password credentials to connect to the database on server_name. Note: The following two attributes are required for SSH.
 
-server_password
+server_account - SSH username on server_address. Note: This field is only valid if the authenticationmode is ssh.
+
+server_password - SSH password associated with server_account. Note: This field is only valid if the authenticationmode is ssh.
 
 =cut
 
@@ -410,7 +414,7 @@ sub _fetch_optional_params {
 
 	my ($self, $action) = @_;
 	my $optional_keys_map = {
-		create_website  => { map { ($_ => 1) } qw(port) },
+		create_website  => { map { ($_ => 1) } qw(port dir_path) },
 		create_database => { map { ($_ => 1) } qw(website_id authentication_mode server_account server_password) },
 		edit_database   => { map { ($_ => 1) } qw(server_address account password port database_name authentication_mode server_account server_password) },
 	};
