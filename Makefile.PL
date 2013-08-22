@@ -18,8 +18,10 @@ WriteMakefile(
         'Test::More' => 0,
     },
     PREREQ_PM => {
-        'LWP::UserAgent'     => 0,
-        'LWP::Authen::OAuth' => 1.02,
+        'LWP::UserAgent' => 0,
+	'JSON'           => 0,
+	'Net::OAuth'     => 0,
+	'HTTP::Request'  => 0,
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES => 'WWW-Codeguard-*' },
