@@ -361,7 +361,7 @@ sub _set_uri {
 		'create_database'    => '/database_backups',
 		'list_databases'     => '/database_backups',
 		'show_database'      => '/websites/'.($params->{website_id} || '').'/database_backups/'.($params->{database_id} || ''),
-		'edit_database'      => '/database_backups'.($params->{database_id} || ''),
+		'edit_database'      => '/database_backups/'.($params->{database_id} || ''),
 	};
 
 	my $oauth_req = Net::OAuth->request('protected resource')->new(

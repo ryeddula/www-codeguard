@@ -45,8 +45,8 @@ Depending on the params you pass, it will return either the 'Partner' object, or
 		{
 			api_url => $api_url,
 			user => {
+				api_key       => $user_api_key,
 				api_secret    => $user_api_secret,
-				api_token     => $user_api_token,
 				access_secret => $user_access_secret,
 				access_token  => $user_access_token,
 			},
