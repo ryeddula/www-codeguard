@@ -1,16 +1,11 @@
 package WWW::Codeguard;
 
-use 5.006;
 use strict;
 use warnings FATAL => 'all', NONFATAL => 'uninitialized';
 
 use Carp qw(croak);
-use Data::Dumper;
 use English qw(-no_match_vars);
 use JSON;
-
-use WWW::Codeguard::Partner;
-use WWW::Codeguard::User;
 
 =head1 NAME
 
@@ -18,16 +13,15 @@ WWW::Codeguard - Perl interface to interact with the Codeguard API
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
-
+our $VERSION = '0.02';
 
 =head1 SYNOPSIS
 
-This module provides you with an perl interface to interact with the Codeguard API. This is really just a factory class that returns the proper object to use.
+This module provides you with an perl interface to interact with the Codeguard API. This is really just the base class that returns the proper object to use.
 Depending on the params you pass, it will return either the 'Partner' object, or the 'User' object.
 
 	use WWW::Codeguard;
@@ -60,9 +54,7 @@ Depending on the params you pass, it will return either the 'Partner' object, or
 B<Input> takes an hashref of params. The hashref should contain:
 
 	api_url
-
-	partner => $hashref_containing_the_partner_options 
-
+	partner => $hashref_containing_the_partner_options
 	user => $hashref_containing_the_user_options
 
 If both 'partner' and 'user' options are specified, then you should use it an array context to get back both objects:
@@ -95,10 +87,12 @@ sub new {
 
 	my ($partner_obj, $user_obj);
 	if ( exists $opts->{partner} and UNIVERSAL::isa($opts->{partner}, 'HASH') ) {
+		require WWW::Codeguard::Partner;
 		$partner_obj = WWW::Codeguard::Partner->new($opts->{api_url}, $opts->{partner});
 	}
 
 	if ( exists $opts->{user} and UNIVERSAL::isa($opts->{user}, 'HASH') ) {
+		require WWW::Codeguard::User;
 		$user_obj = WWW::Codeguard::User->new($opts->{api_url}, $opts->{user});
 	}
 
@@ -109,8 +103,9 @@ sub new {
 
 =head1 METHODS
 
-Partner methods are documented in WWW::Codeguard::Partner
-User methods are documented in WWW::Codeguard::User
+Partner methods are documented in L<WWW::Codeguard::Partner>
+
+User methods are documented in L<WWW::Codeguard::User>
 
 =cut
 
@@ -137,6 +132,10 @@ sub VERSION { return $WWW::Codeguard::VERSION; }
 sub _do_method {
 
 	my ($self, $name, $params) = @_;
+	if (defined $params and not UNIVERSAL::isa($params, 'HASH')) {
+		$self->_error('$params passed has to be a HASHREF', 1);
+	}
+
 	$self->_sanitize_params($name, $params) or
 		$self->_error('Failed to sanitize params: "'.$self->get_error.'" - The parameters passed in were: '."\n".$self->_stringify_hash($params), 1);
 
@@ -152,9 +151,11 @@ sub _dispatch_request {
 	my $request      = $self->_create_request($action, $params);
 	my $api_response = $self->{_ua}->request($request);
 	if (my $output = $api_response->decoded_content) {
-		my $json = eval { decode_json ( $output ); }
-			or return $output;
+		my $json = eval { decode_json($output); }
+			or return $self->_error('Invalid API reponse received (unable to decode json): '.$api_response->status_line, 1);
 		return $json;
+	} else {
+		return $self->_error('Invalid API reponse received (no json received): '.$api_response->status_line, 1);
 	}
 	return;
 }
@@ -182,7 +183,7 @@ sub _set_content {
 
 	my ($self, $request, $params) = @_;
 	if ('GET' ne $request->method) {
-		my $json = eval { 
+		my $json = eval {
 			encode_json( $params );
 		} or $self->_error('Failed to encode json payload for request', 1);
 		$request->content($json);
@@ -205,7 +206,7 @@ B<Outupt>: Undef if everything is good. If errors are detected, it will return a
 
 This also 'prunes' the first hashref of params that are not specified in either the required or the optional hashrefs.
 
-=cut 
+=cut
 
 sub _check_params {
 
@@ -272,9 +273,11 @@ automatically be notified of progress on your bug as I make changes.
 
 =head1 SUPPORT
 
-You can find documentation for this module with the perldoc command.
+You can find documentation for this module with the following perldoc commands.
 
+    perldoc WWW::Codeguard
     perldoc WWW::Codeguard::Partner
+    perldoc WWW::Codeguard::User
 
 
 You can also look for information at:
@@ -299,13 +302,11 @@ L<http://search.cpan.org/dist/WWW-Codeguard/>
 
 =back
 
-
 =head1 ACKNOWLEDGEMENTS
-
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2013 Rishwanth Yeddula.
+Copyright 2014 Rishwanth Yeddula.
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of the the Artistic License (2.0). You may obtain a

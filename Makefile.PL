@@ -16,12 +16,15 @@ WriteMakefile(
     },
     BUILD_REQUIRES => {
         'Test::More' => 0,
+        'JSON'       => 0,
+        'parent'     => 0, # this is core as of 5.10.1, so specifing this for 5.8 installs
     },
     PREREQ_PM => {
         'LWP::UserAgent' => 0,
-	'JSON'           => 0,
-	'Net::OAuth'     => 0,
-	'HTTP::Request'  => 0,
+        'JSON'           => 0,
+        'Net::OAuth'     => 0,
+        'HTTP::Request'  => 0,
+        'parent'         => 0, # this is core as of 5.10.1, so specifing this for 5.8 installs
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES => 'WWW-Codeguard-*' },
