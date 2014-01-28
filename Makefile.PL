@@ -26,6 +26,16 @@ WriteMakefile(
         'HTTP::Request'  => 0,
         'parent'         => 0, # this is core as of 5.10.1, so specifing this for 5.8 installs
     },
+    META_MERGE => {
+        'meta-spec' => { version => 2 },
+        resources => {
+            repository => {
+                type => 'git',
+                url  => 'https://github.com/ryeddula/www-codeguard.git',
+                web  => 'https://github.com/ryeddula/www-codeguard',
+            },
+        },
+    },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES => 'WWW-Codeguard-*' },
 );
