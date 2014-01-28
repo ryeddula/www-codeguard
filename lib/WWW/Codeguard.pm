@@ -302,7 +302,9 @@ L<http://search.cpan.org/dist/WWW-Codeguard/>
 
 =back
 
-=head1 ACKNOWLEDGEMENTS
+=head1 ACKNOWLEDGMENTS
+
+Thanks to L<Hostgator.com|http://hostgator.com/> for funding the development of this module and providing test resources.
 
 =head1 LICENSE AND COPYRIGHT
 

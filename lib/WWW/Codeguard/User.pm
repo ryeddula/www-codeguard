@@ -654,9 +654,9 @@ L<http://search.cpan.org/dist/WWW-Codeguard/>
 
 =back
 
+=head1 ACKNOWLEDGMENTS
 
-=head1 ACKNOWLEDGEMENTS
-
+Thanks to L<Hostgator.com|http://hostgator.com/> for funding the development of this module and providing test resources.
 
 =head1 LICENSE AND COPYRIGHT
 
