@@ -6,3 +6,5 @@ Revision history for WWW-Codeguard
         Added tests
         Added 'delete resource' calls in WWW::Codeguard::User
         Added separate 'edit resource' calls in WWW::Codeguard::User
+0.03    Jul 31, 2015
+        Moved show_database param website_id from required to optional.
